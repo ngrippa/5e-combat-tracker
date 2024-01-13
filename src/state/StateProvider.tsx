@@ -1,4 +1,4 @@
-import { State, globalState } from "./State.tsx";
+import { globalState, State } from "./State.tsx";
 import { useImmer } from "use-immer";
 import { nanoid } from "nanoid";
 import { PropsWithChildren, useEffect, useMemo } from "react";
@@ -18,7 +18,7 @@ const zahir = {
 const korvin = { name: "Corvin", id: nanoid(), maxHp: 90, currentHp: 90 };
 const lyra = { name: "Lyra", id: nanoid(), maxHp: 90, currentHp: 90 };
 
-const useSyncedObject = <T extends Record<string, unknown> | null>(
+const useSyncedObject = <T extends Record<string, unknown> | unknown[] | null>(
   key: string,
   initialStateValue: T,
   initialStoreValue: T,
@@ -45,6 +45,7 @@ const useSyncedObject = <T extends Record<string, unknown> | null>(
 };
 
 const emptyObj = {};
+const emptyArr: never[] = [];
 const initialChars = {
   [zahir.id]: zahir,
   [korvin.id]: korvin,
@@ -58,6 +59,11 @@ const migrateChars = (chars: State["charactersDict"]) => {
   });
   return chars;
 };
+
+const flatChars = Object.values(initialChars).map((c) => ({
+  ...c,
+  libraryId: nanoid(),
+}));
 
 export const StateProvider = ({ children }: PropsWithChildren) => {
   const [charactersDict, setCharacters] = useSyncedObject<
@@ -76,6 +82,10 @@ export const StateProvider = ({ children }: PropsWithChildren) => {
     null,
   );
 
+  const [characterLibrary, setCharacterLibrary] = useSyncedObject<
+    State["characterLibrary"]
+  >("characterLibrary", emptyArr, flatChars);
+
   const characters = useMemo(
     () => getCharacters(charactersDict, !options.enterInitiative),
     [charactersDict, options.enterInitiative],
@@ -91,6 +101,8 @@ export const StateProvider = ({ children }: PropsWithChildren) => {
         setOptions,
         turnInfo,
         setTurnInfo,
+        characterLibrary,
+        setCharacterLibrary,
       }}
     >
       {children}

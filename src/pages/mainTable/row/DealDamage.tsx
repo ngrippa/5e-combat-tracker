@@ -47,7 +47,7 @@ export const DealDamage = () => {
             if (char.concentrated && dmg > 0) setDamage(dmg);
           })
         }
-        inputProps={{ label: "Deal Damage" }}
+        inputProps={{ label: "Deal Damage", type: "number" }}
         icon={
           <SvgIcon>
             <DD />
@@ -56,7 +56,7 @@ export const DealDamage = () => {
       >
         <Box mb={2}>
           {effects.map(({ effect, forChar }) => (
-            <Typography color="warning.main">
+            <Typography color="warning.main" key={effect}>
               {effect}: {forChar}
             </Typography>
           ))}

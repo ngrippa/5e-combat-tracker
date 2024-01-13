@@ -27,4 +27,5 @@ export const baseChar: Character = {
     immunities: [],
     vulnerabilities: [],
   },
+  isPersistent: true,
 };

@@ -6,7 +6,8 @@ import { ProgressTurn } from "./ProgressTurn.tsx";
 import { Stopwatch } from "./Stopwatch.tsx";
 
 export const OptionControls = () => {
-  const { options, setOptions, setCharacters, setTurnInfo } = useGlobalState();
+  const { options, setOptions, setCharacters, setTurnInfo, turnInfo } =
+    useGlobalState();
   const handleChange = (key: keyof Options) => () =>
     setOptions((d) => {
       d[key] = !d[key];
@@ -14,11 +15,16 @@ export const OptionControls = () => {
 
   const resetFight = () => {
     setCharacters((chars) => {
-      Object.values(chars).forEach((char) => {
-        char.initiative = 0;
-        char.effects.status = [];
-        char.effects.preTurn = [];
-        char.effects.postTurn = [];
+      Object.keys(chars).forEach((charId) => {
+        const char = chars[charId];
+        if (char.isPersistent) {
+          char.initiative = 0;
+          char.effects.status = [];
+          char.effects.preTurn = [];
+          char.effects.postTurn = [];
+        } else {
+          delete chars[charId];
+        }
       });
     });
     setOptions((o) => {
@@ -39,7 +45,7 @@ export const OptionControls = () => {
 
   return (
     <Box mt={2} p={3}>
-      <Stopwatch />
+      {turnInfo && <Stopwatch />}
       <ProgressTurn />
       <Button
         variant="outlined"

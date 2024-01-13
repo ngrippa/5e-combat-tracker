@@ -4,22 +4,30 @@ import { specialDamageEffects } from "../constants/specialDamageEffects.ts";
 
 export type Effect = { id: string; label: string };
 
-export type Character = {
-  id: string;
+export type StaticCharacter = {
+  isPersistent: boolean;
   name: string;
   maxHp: number;
+  ac: string;
+  saves: Record<ArrayElement<typeof saves>, string>;
+  specialDamageEffects: Record<
+    ArrayElement<typeof specialDamageEffects>,
+    string[]
+  >;
+};
+
+export type LibraryCharacter = StaticCharacter & {
+  libraryId: string;
+};
+
+export type Character = StaticCharacter & {
+  id: string;
   currentHp: number;
   concentrated: boolean;
   initiative: number;
-  ac: string;
-  saves: Record<ArrayElement<typeof saves>, string>;
   effects: {
     preTurn: Effect[];
     postTurn: Effect[];
     status: Effect[];
   };
-  specialDamageEffects: Record<
-    ArrayElement<typeof specialDamageEffects>,
-    string[]
-  >;
 };

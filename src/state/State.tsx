@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { Character } from "../types/Character.ts";
+import { Character, LibraryCharacter } from "../types/Character.ts";
 import { noop } from "lodash";
 import { Updater } from "use-immer";
 import { Options } from "../types/Options.ts";
@@ -14,6 +14,8 @@ export type State = {
   setOptions: Updater<Options>;
   turnInfo: TurnInfo;
   setTurnInfo: Updater<TurnInfo>;
+  characterLibrary: LibraryCharacter[];
+  setCharacterLibrary: Updater<LibraryCharacter[]>;
 };
 
 export const globalState = createContext<State>({
@@ -24,6 +26,8 @@ export const globalState = createContext<State>({
   setOptions: noop,
   turnInfo: null,
   setTurnInfo: noop,
+  characterLibrary: [],
+  setCharacterLibrary: noop,
 });
 
 export const useGlobalState = () => useContext(globalState);

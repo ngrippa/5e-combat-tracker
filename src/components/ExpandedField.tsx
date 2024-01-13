@@ -25,7 +25,7 @@ export const ExpandedField = (
         disableRestoreFocus
         onClose={() => props.setOpen(false)}
       >
-        <DialogTitle>{props.title}</DialogTitle>
+        <DialogTitle variant="h5">{props.title}</DialogTitle>
         <DialogContent>{props.children}</DialogContent>
       </Dialog>
     </>
