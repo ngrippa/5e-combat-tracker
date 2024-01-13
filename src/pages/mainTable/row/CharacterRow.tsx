@@ -7,6 +7,7 @@ import { IconButton, Typography } from "@mui/material";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import { useChar } from "../charContext.ts";
 import { StatusEffect } from "./StatusEffect.tsx";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export const CharacterRow = () => {
   const { options, setCharacters, turnInfo } = useGlobalState();
@@ -63,6 +64,17 @@ export const CharacterRow = () => {
       </StyledTableCell>
       <StyledTableCell>
         <StatusEffect type="postTurn" />
+      </StyledTableCell>
+      <StyledTableCell>
+        <IconButton
+          onClick={() => {
+            setCharacters((d) => {
+              delete d[char.id];
+            });
+          }}
+        >
+          <DeleteIcon />
+        </IconButton>
       </StyledTableCell>
     </StyledTableRow>
   );

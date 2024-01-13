@@ -46,6 +46,7 @@ export const MainTable = () => {
             <StyledTableCell>
               <Typography>Post-Turn</Typography>
             </StyledTableCell>
+            <StyledTableCell />
           </TableRow>
         </TableHead>
         <TableBody>

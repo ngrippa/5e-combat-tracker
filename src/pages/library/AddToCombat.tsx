@@ -13,6 +13,8 @@ import { FormInput } from "../../components/FormInput.tsx";
 import { Box, IconButton } from "@mui/material";
 import { useGlobalState } from "../../state/State.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { cloneDeep, merge } from "lodash";
+import { baseChar } from "../../constants/baseChar.ts";
 
 type AddToCombatForm = {
   characters: {
@@ -40,7 +42,6 @@ export const AddToCombat = (props: { id: LibraryCharacter["libraryId"] }) => {
   }, [methods, append]);
 
   const onSuccess: SubmitHandler<AddToCombatForm> = ({ characters }) => {
-    console.log("exec");
     const usps = characters.map((u) => u.usp).filter(Boolean);
     if (!usps.length) usps.push("");
     const rootCharacter = characterLibrary.find(
@@ -49,7 +50,7 @@ export const AddToCombat = (props: { id: LibraryCharacter["libraryId"] }) => {
     if (!rootCharacter) return;
     const newCharacters = usps.map(
       (c) =>
-        ({
+        merge(cloneDeep(baseChar), {
           ...rootCharacter,
           name: c ? `${rootCharacter.name} (${c})` : rootCharacter.name,
           id: nanoid(),
@@ -61,8 +62,8 @@ export const AddToCombat = (props: { id: LibraryCharacter["libraryId"] }) => {
     );
     setCharacters((d) => {
       newCharacters.forEach((c) => (d[c.id] = c));
-      console.log(d);
     });
+    methods.reset();
     setOpen("");
   };
 
@@ -77,13 +78,13 @@ export const AddToCombat = (props: { id: LibraryCharacter["libraryId"] }) => {
           <form onSubmit={methods.handleSubmit(onSuccess)}>
             {fields.map((field, index) => (
               <Box
+                key={field.id}
                 p={1}
                 justifyContent="center"
                 alignItems="center"
                 display="flex"
               >
                 <FormInput
-                  key={field.id}
                   name={`characters.${index}.usp`}
                   label={"What makes this monster special?"}
                   optional

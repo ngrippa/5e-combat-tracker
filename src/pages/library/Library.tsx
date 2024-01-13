@@ -19,7 +19,6 @@ export const Library = () => {
         headerName: "Aktionen",
         type: "actions",
         renderCell: ({ id }) => {
-          console.log("render", id);
           return (
             <Box>
               <AddToCombat id={id as string} />
@@ -40,7 +39,7 @@ export const Library = () => {
         },
       },
     ],
-    [],
+    [setCharacterLibrary],
   );
   return (
     <Box>

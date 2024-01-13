@@ -30,7 +30,6 @@ export const AddChar = () => {
     ac,
     ...rest
   }) => {
-    console.log("trigger");
     setCharacterLibrary((d) => {
       const saves = Object.fromEntries(
         baseSaves.map((s) => [s, rest[s] ?? "?"]),
@@ -80,8 +79,8 @@ export const AddChar = () => {
               <Typography variant="h6">Saves (optional)</Typography>
               <Box display="flex">
                 {baseSaves.map((save) => (
-                  <Box m={1}>
-                    <FormInput key={save} name={save} optional />
+                  <Box m={1} key={save}>
+                    <FormInput name={save} optional />
                   </Box>
                 ))}
               </Box>

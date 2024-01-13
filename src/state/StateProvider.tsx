@@ -1,7 +1,7 @@
 import { globalState, State } from "./State.tsx";
 import { useImmer } from "use-immer";
 import { nanoid } from "nanoid";
-import { PropsWithChildren, useEffect, useMemo } from "react";
+import { PropsWithChildren, useEffect, useMemo, useState } from "react";
 import { cloneDeep, merge } from "lodash";
 import { baseChar } from "../constants/baseChar.ts";
 import { getCharacters } from "../utils/getCharacters.ts";
@@ -14,9 +14,22 @@ const zahir = {
   specialDamageEffects: {
     resistances: ["fire"],
   },
+  saves: baseChar.saves,
 };
-const korvin = { name: "Corvin", id: nanoid(), maxHp: 90, currentHp: 90 };
-const lyra = { name: "Lyra", id: nanoid(), maxHp: 90, currentHp: 90 };
+const korvin = {
+  name: "Corvin",
+  id: nanoid(),
+  maxHp: 90,
+  currentHp: 90,
+  saves: baseChar.saves,
+};
+const lyra = {
+  name: "Lyra",
+  id: nanoid(),
+  maxHp: 90,
+  currentHp: 90,
+  saves: baseChar.saves,
+};
 
 const useSyncedObject = <T extends Record<string, unknown> | unknown[] | null>(
   key: string,
@@ -25,11 +38,12 @@ const useSyncedObject = <T extends Record<string, unknown> | unknown[] | null>(
   migrate?: (old: T) => T,
 ) => {
   const [obj, setObj] = useImmer<T>(initialStateValue);
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!obj || Object.keys(obj).length === 0) return;
+    if (isLoading) return;
     localStorage.setItem(key, JSON.stringify(obj));
-  }, [obj, key]);
+  }, [obj, key, isLoading]);
 
   useEffect(() => {
     const local = localStorage.getItem(key);
@@ -40,6 +54,7 @@ const useSyncedObject = <T extends Record<string, unknown> | unknown[] | null>(
       d = migrate?.(read) || read;
       return d;
     });
+    setLoading(false);
   }, [key, initialStoreValue, migrate, setObj]);
   return [obj, setObj] as const;
 };
