@@ -3,6 +3,7 @@ import { Box } from "@mui/material";
 import { Options } from "../../types/Options.ts";
 import Button from "@mui/material/Button";
 import { ProgressTurn } from "./ProgressTurn.tsx";
+import { Stopwatch } from "./Stopwatch.tsx";
 
 export const OptionControls = () => {
   const { options, setOptions, setCharacters, setTurnInfo } = useGlobalState();
@@ -38,6 +39,7 @@ export const OptionControls = () => {
 
   return (
     <Box mt={2} p={3}>
+      <Stopwatch />
       <ProgressTurn />
       <Button
         variant="outlined"

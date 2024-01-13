@@ -22,4 +22,9 @@ export const baseChar: Character = {
     postTurn: [],
     status: [],
   },
+  specialDamageEffects: {
+    resistances: [],
+    immunities: [],
+    vulnerabilities: [],
+  },
 };

@@ -38,9 +38,10 @@ export const ProgressTurn = () => {
           onClose={progressTurn}
           onSubmit={progressTurn}
           onKeyDown={(event) => {
+            if (event.key !== "Enter") return;
             event.stopPropagation();
             event.preventDefault();
-            if (event.key === "Enter") progressTurn();
+            progressTurn();
           }}
         >
           <DialogTitle id="alert-dialog-title">

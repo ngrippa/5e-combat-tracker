@@ -6,7 +6,15 @@ import { cloneDeep, merge } from "lodash";
 import { baseChar } from "../constants/baseChar.ts";
 import { getCharacters } from "../utils/getCharacters.ts";
 
-const zahir = { name: "Zahir", id: nanoid(), maxHp: 120, currentHp: 120 };
+const zahir = {
+  name: "Zahir",
+  id: nanoid(),
+  maxHp: 120,
+  currentHp: 120,
+  specialDamageEffects: {
+    resistances: ["fire"],
+  },
+};
 const korvin = { name: "Corvin", id: nanoid(), maxHp: 90, currentHp: 90 };
 const lyra = { name: "Lyra", id: nanoid(), maxHp: 90, currentHp: 90 };
 

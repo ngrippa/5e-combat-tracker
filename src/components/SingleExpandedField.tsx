@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { PropsWithChildren, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { InvisibleSubmit, StyledTextField } from "./Form.tsx";
 import { ExpandedField } from "./ExpandedField.tsx";
@@ -6,12 +6,14 @@ import { Box, TextFieldProps } from "@mui/material";
 
 type Form = { value: string };
 
-export const SingleExpandedField = (props: {
-  title: string;
-  success: (form: string) => void | Promise<void>;
-  inputProps?: TextFieldProps;
-  icon?: React.ReactNode;
-}) => {
+export const SingleExpandedField = (
+  props: PropsWithChildren<{
+    title: string;
+    success: (form: string) => void | Promise<void>;
+    inputProps?: TextFieldProps;
+    icon?: React.ReactNode;
+  }>,
+) => {
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
 
@@ -32,6 +34,7 @@ export const SingleExpandedField = (props: {
       setOpen={setOpen}
       icon={props.icon}
     >
+      {props.children}
       <Box mt={1}>
         <form onSubmit={handleSubmit(onSuccess)}>
           <Controller

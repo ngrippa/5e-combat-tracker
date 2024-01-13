@@ -47,9 +47,11 @@ export const ConcentrationCheck = (props: {
         >
           Nicht geschafft
         </Button>
-        <Button onClick={handleClose} autoFocus>
-          Geschafft!
-        </Button>
+        {char.currentHp > 0 && (
+          <Button onClick={handleClose} autoFocus>
+            Geschafft!
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

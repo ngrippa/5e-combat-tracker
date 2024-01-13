@@ -1,5 +1,6 @@
 import { ArrayElement } from "./utils.ts";
 import { saves } from "../constants/saves.ts";
+import { specialDamageEffects } from "../constants/specialDamageEffects.ts";
 
 export type Effect = { id: string; label: string };
 
@@ -17,4 +18,8 @@ export type Character = {
     postTurn: Effect[];
     status: Effect[];
   };
+  specialDamageEffects: Record<
+    ArrayElement<typeof specialDamageEffects>,
+    string[]
+  >;
 };

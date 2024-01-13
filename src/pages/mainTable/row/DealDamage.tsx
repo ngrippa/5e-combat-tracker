@@ -1,11 +1,13 @@
 /// <reference types="vite-plugin-svgr/client" />
 import { useGlobalState } from "../../../state/State.tsx";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ConcentrationCheck } from "./ConcentrationCheck.tsx";
 import { useChar } from "../charContext.ts";
 import { SingleExpandedField } from "../../../components/SingleExpandedField.tsx";
 import DD from "../../../assets/sword.svg?react";
-import { SvgIcon, Typography } from "@mui/material";
+import { Box, SvgIcon, Typography } from "@mui/material";
+import { clamp } from "lodash";
+import { specialDamageEffects } from "../../../constants/specialDamageEffects.ts";
 
 export const DealDamage = () => {
   const char = useChar();
@@ -13,9 +15,25 @@ export const DealDamage = () => {
 
   const [damage, setDamage] = useState<number>(0);
 
+  const getHpColor = () => {
+    if (char.currentHp <= 0) return "error.main";
+    if (char.currentHp <= char.maxHp / 4) return "warning.main";
+  };
+
+  const effects = useMemo(
+    () =>
+      specialDamageEffects
+        .map((effect) => ({
+          effect,
+          forChar: char.specialDamageEffects[effect].join(", "),
+        }))
+        .filter((e) => e.forChar),
+    [char],
+  );
+
   return (
     <>
-      <Typography noWrap>
+      <Typography noWrap color={getHpColor()}>
         {char.currentHp} / {char.maxHp}
       </Typography>
       <SingleExpandedField
@@ -24,8 +42,9 @@ export const DealDamage = () => {
           setCharacters((d) => {
             const dmg = +value;
             const c = d[char.id];
-            c.currentHp -= +dmg;
-            if (char.concentrated) setDamage(dmg);
+            const newHp = c.currentHp - +dmg;
+            c.currentHp = clamp(newHp, 0, c.maxHp);
+            if (char.concentrated && dmg > 0) setDamage(dmg);
           })
         }
         inputProps={{ label: "Deal Damage" }}
@@ -34,7 +53,15 @@ export const DealDamage = () => {
             <DD />
           </SvgIcon>
         }
-      />
+      >
+        <Box mb={2}>
+          {effects.map(({ effect, forChar }) => (
+            <Typography color="warning.main">
+              {effect}: {forChar}
+            </Typography>
+          ))}
+        </Box>
+      </SingleExpandedField>
       <ConcentrationCheck setDamage={setDamage} damage={damage} />
     </>
   );
