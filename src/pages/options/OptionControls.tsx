@@ -2,9 +2,10 @@ import { useGlobalState } from "../../state/State.tsx";
 import { Box } from "@mui/material";
 import { Options } from "../../types/Options.ts";
 import Button from "@mui/material/Button";
+import { ProgressTurn } from "./ProgressTurn.tsx";
 
 export const OptionControls = () => {
-  const { options, setOptions, setCharacters } = useGlobalState();
+  const { options, setOptions, setCharacters, setTurnInfo } = useGlobalState();
   const handleChange = (key: keyof Options) => () =>
     setOptions((d) => {
       d[key] = !d[key];
@@ -19,6 +20,10 @@ export const OptionControls = () => {
         char.effects.postTurn = [];
       });
     });
+    setOptions((o) => {
+      o.enterInitiative = true;
+    });
+    setTurnInfo(null);
   };
 
   const longRest = () => {
@@ -33,9 +38,7 @@ export const OptionControls = () => {
 
   return (
     <Box mt={2} p={3}>
-      <Button variant="outlined" color="success">
-        Continue
-      </Button>
+      <ProgressTurn />
       <Button
         variant="outlined"
         onClick={handleChange("enterInitiative")}

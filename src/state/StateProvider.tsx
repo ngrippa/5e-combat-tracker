@@ -2,59 +2,88 @@ import { State, globalState } from "./State.tsx";
 import { useImmer } from "use-immer";
 import { nanoid } from "nanoid";
 import { PropsWithChildren, useEffect, useMemo } from "react";
-import { cloneDeep, merge, orderBy } from "lodash";
+import { cloneDeep, merge } from "lodash";
 import { baseChar } from "../constants/baseChar.ts";
+import { getCharacters } from "../utils/getCharacters.ts";
 
 const zahir = { name: "Zahir", id: nanoid(), maxHp: 120, currentHp: 120 };
 const korvin = { name: "Corvin", id: nanoid(), maxHp: 90, currentHp: 90 };
 const lyra = { name: "Lyra", id: nanoid(), maxHp: 90, currentHp: 90 };
 
+const useSyncedObject = <T extends Record<string, unknown> | null>(
+  key: string,
+  initialStateValue: T,
+  initialStoreValue: T,
+  migrate?: (old: T) => T,
+) => {
+  const [obj, setObj] = useImmer<T>(initialStateValue);
+
+  useEffect(() => {
+    if (!obj || Object.keys(obj).length === 0) return;
+    localStorage.setItem(key, JSON.stringify(obj));
+  }, [obj, key]);
+
+  useEffect(() => {
+    const local = localStorage.getItem(key);
+
+    setObj((d) => {
+      const read =
+        local && local.length > 2 ? JSON.parse(local) : initialStoreValue;
+      d = migrate?.(read) || read;
+      return d;
+    });
+  }, [key, initialStoreValue, migrate, setObj]);
+  return [obj, setObj] as const;
+};
+
+const emptyObj = {};
+const initialChars = {
+  [zahir.id]: zahir,
+  [korvin.id]: korvin,
+  [lyra.id]: lyra,
+} as State["charactersDict"];
+
+const migrateChars = (chars: State["charactersDict"]) => {
+  Object.keys(chars).forEach((k) => {
+    const newChar = cloneDeep(baseChar);
+    chars[k] = merge(newChar, chars[k]);
+  });
+  return chars;
+};
+
 export const StateProvider = ({ children }: PropsWithChildren) => {
-  const [charactersDict, setCharacters] = useImmer<State["charactersDict"]>({});
-  const [options, setOptions] = useImmer<State["options"]>({});
+  const [charactersDict, setCharacters] = useSyncedObject<
+    State["charactersDict"]
+  >("characters", emptyObj, initialChars, migrateChars);
 
-  const characters = useMemo(() => {
-    const chars = Object.values(charactersDict);
-    if (options.enterInitiative) return chars;
-    return orderBy(chars, (c) => c.initiative, "desc");
-  }, [charactersDict, options.enterInitiative]);
+  const [options, setOptions] = useSyncedObject<State["options"]>(
+    "options",
+    emptyObj,
+    emptyObj,
+  );
 
-  useEffect(() => {
-    if (Object.keys(charactersDict).length === 0) return;
-    localStorage.setItem("characters", JSON.stringify(charactersDict));
-    localStorage.setItem("options", JSON.stringify(options));
-  }, [charactersDict, options]);
+  const [turnInfo, setTurnInfo] = useSyncedObject<State["turnInfo"]>(
+    "turnInfo",
+    null,
+    null,
+  );
 
-  useEffect(() => {
-    setCharacters((d) => {
-      const local = localStorage.getItem("characters");
-
-      d =
-        local && local.length > 2
-          ? JSON.parse(local)
-          : {
-              [zahir.id]: zahir,
-              [korvin.id]: korvin,
-              [lyra.id]: lyra,
-            };
-
-      Object.keys(d).forEach((k) => {
-        const newChar = cloneDeep(baseChar);
-        d[k] = merge(newChar, d[k]);
-      });
-      return d;
-    });
-
-    setOptions((d) => {
-      const local = localStorage.getItem("options");
-      d = local && local.length > 2 ? JSON.parse(local) : {};
-      return d;
-    });
-  }, [setCharacters, setOptions]);
+  const characters = useMemo(
+    () => getCharacters(charactersDict, !options.enterInitiative),
+    [charactersDict, options.enterInitiative],
+  );
 
   return (
     <globalState.Provider
-      value={{ characters, setCharacters, charactersDict, options, setOptions }}
+      value={{
+        characters,
+        setCharacters,
+        charactersDict,
+        options,
+        setOptions,
+        turnInfo,
+        setTurnInfo,
+      }}
     >
       {children}
     </globalState.Provider>

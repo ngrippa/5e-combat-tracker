@@ -9,12 +9,16 @@ import { useChar } from "../charContext.ts";
 import { StatusEffect } from "./StatusEffect.tsx";
 
 export const CharacterRow = () => {
-  const { options, setCharacters } = useGlobalState();
+  const { options, setCharacters, turnInfo } = useGlobalState();
   const char = useChar();
   return (
     <StyledTableRow>
       <StyledTableCell component="th" scope="row">
-        <Typography>{char.name}</Typography>
+        <Typography
+          color={turnInfo?.currentChar === char.id ? "success.main" : undefined}
+        >
+          {char.name}
+        </Typography>
       </StyledTableCell>
       {options.enterInitiative && (
         <StyledTableCell>

@@ -50,8 +50,8 @@ export const MainTable = () => {
         </TableHead>
         <TableBody>
           {characters.map((char) => (
-            <charContext.Provider value={char}>
-              <CharacterRow key={char.id} />
+            <charContext.Provider value={char} key={char.id}>
+              <CharacterRow />
             </charContext.Provider>
           ))}
         </TableBody>
