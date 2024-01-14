@@ -25,7 +25,7 @@ export const Stopwatch = () => {
   const [difference, setDifference] = useState<Stopwatch>({ m: 0, s: 0 });
 
   useEffect(() => {
-    let i: number | undefined;
+    let i: NodeJS.Timeout | undefined;
     i = setInterval(() => {
       setDifference(differenceInMinutesAndSeconds(new Date(), startDate));
     }, 250);
