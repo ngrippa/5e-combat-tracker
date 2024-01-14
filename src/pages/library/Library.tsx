@@ -43,7 +43,6 @@ export const Library = () => {
   );
   return (
     <Box>
-      <AddChar />
       <Box my={1}>
         <DataGrid
           rows={characterLibrary}
@@ -66,6 +65,8 @@ export const Library = () => {
           getRowId={(char) => char.libraryId}
         />
       </Box>
+
+      <AddChar />
     </Box>
   );
 };

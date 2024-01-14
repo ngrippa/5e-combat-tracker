@@ -8,10 +8,13 @@ import DD from "../../../assets/sword.svg?react";
 import { Box, SvgIcon, Typography } from "@mui/material";
 import { clamp } from "lodash";
 import { specialDamageEffects } from "../../../constants/specialDamageEffects.ts";
+import { rollDieString } from "../../../dies/rollDieString.ts";
+import { useSnackbar } from "notistack";
 
 export const DealDamage = () => {
   const char = useChar();
   const { setCharacters } = useGlobalState();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [damage, setDamage] = useState<number>(0);
 
@@ -40,14 +43,18 @@ export const DealDamage = () => {
         title={`Deal damage to ${char.name}`}
         success={(value) =>
           setCharacters((d) => {
-            const dmg = +value;
+            let dmg = +value;
+            if (isNaN(dmg)) {
+              dmg = rollDieString(value);
+              enqueueSnackbar(`Rolled ${dmg} damage`, { variant: "info" });
+            }
             const c = d[char.id];
             const newHp = c.currentHp - +dmg;
             c.currentHp = clamp(newHp, 0, c.maxHp);
             if (char.concentrated && dmg > 0) setDamage(dmg);
           })
         }
-        inputProps={{ label: "Deal Damage", type: "number" }}
+        inputProps={{ label: "Deal Damage" }}
         icon={
           <SvgIcon>
             <DD />

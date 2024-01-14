@@ -4,6 +4,7 @@ import { Options } from "../../types/Options.ts";
 import Button from "@mui/material/Button";
 import { ProgressTurn } from "./ProgressTurn.tsx";
 import { Stopwatch } from "./Stopwatch.tsx";
+import { RollDie } from "./RollDie.tsx";
 
 export const OptionControls = () => {
   const { options, setOptions, setCharacters, setTurnInfo, turnInfo } =
@@ -45,22 +46,25 @@ export const OptionControls = () => {
 
   return (
     <Box mt={2} p={3}>
-      {turnInfo && <Stopwatch />}
-      <ProgressTurn />
-      <Button
-        variant="outlined"
-        onClick={handleChange("enterInitiative")}
-        sx={{ ml: 1 }}
-      >
-        {options.enterInitiative ? "Sort initiative" : "Enter initiative"}
-      </Button>
+      <Box mb={2}>
+        {turnInfo && <Stopwatch />}
+        <ProgressTurn />
+        <Button
+          variant="outlined"
+          onClick={handleChange("enterInitiative")}
+          sx={{ ml: 1 }}
+        >
+          {options.enterInitiative ? "Sort initiative" : "Enter initiative"}
+        </Button>
 
-      <Button variant="outlined" onClick={resetFight} sx={{ ml: 1 }}>
-        Reset Combat
-      </Button>
-      <Button variant="outlined" onClick={longRest} sx={{ ml: 1 }}>
-        Long Rest
-      </Button>
+        <Button variant="outlined" onClick={resetFight} sx={{ ml: 1 }}>
+          Reset Combat
+        </Button>
+        <Button variant="outlined" onClick={longRest} sx={{ ml: 1 }}>
+          Long Rest
+        </Button>
+      </Box>
+      <RollDie />
     </Box>
   );
 };
