@@ -49,6 +49,7 @@ export const OptionControls = () => {
       <Box mb={2}>
         {turnInfo && <Stopwatch />}
         <ProgressTurn />
+
         <Button
           variant="outlined"
           onClick={handleChange("enterInitiative")}
