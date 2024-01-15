@@ -1,4 +1,4 @@
-import { orderBy } from "lodash";
+import { orderBy } from "lodash-es";
 import { State } from "../state/State.tsx";
 
 export const getCharacters = (

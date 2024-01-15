@@ -6,7 +6,7 @@ import { useChar } from "../charContext.ts";
 import { SingleExpandedField } from "../../../components/SingleExpandedField.tsx";
 import DD from "../../../assets/sword.svg?react";
 import { Box, SvgIcon, Typography } from "@mui/material";
-import { clamp } from "lodash";
+import { clamp } from "lodash-es";
 import { specialDamageEffects } from "../../../constants/specialDamageEffects.ts";
 import { rollDieString } from "../../../dies/rollDieString.ts";
 import { useSnackbar } from "notistack";

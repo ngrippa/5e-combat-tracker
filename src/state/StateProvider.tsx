@@ -2,8 +2,7 @@ import { globalState, State } from "./State.tsx";
 import { useImmer } from "use-immer";
 import { nanoid } from "nanoid";
 import { PropsWithChildren, useEffect, useMemo, useState } from "react";
-import { cloneDeep, merge } from "lodash";
-import { baseChar } from "../constants/baseChar.ts";
+import { baseChar, createChar } from "../constants/baseChar.ts";
 import { getCharacters } from "../utils/getCharacters.ts";
 
 const zahir = {
@@ -69,8 +68,7 @@ const initialChars = {
 
 const migrateChars = (chars: State["charactersDict"]) => {
   Object.keys(chars).forEach((k) => {
-    const newChar = cloneDeep(baseChar);
-    chars[k] = merge(newChar, chars[k]);
+    chars[k] = createChar(chars[k]);
   });
   return chars;
 };

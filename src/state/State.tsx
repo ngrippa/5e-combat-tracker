@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
 import { Character, LibraryCharacter } from "../types/Character.ts";
-import { noop } from "lodash";
+import { noop } from "lodash-es";
 import { Updater } from "use-immer";
 import { Options } from "../types/Options.ts";
 import { TurnInfo } from "../types/TurnInfo.ts";

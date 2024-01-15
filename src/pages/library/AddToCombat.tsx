@@ -7,14 +7,13 @@ import {
   useFieldArray,
   useForm,
 } from "react-hook-form";
-import { Character, LibraryCharacter } from "../../types/Character.ts";
+import { LibraryCharacter } from "../../types/Character.ts";
 import { nanoid } from "nanoid";
 import { FormInput } from "../../components/FormInput.tsx";
 import { Box, IconButton } from "@mui/material";
 import { useGlobalState } from "../../state/State.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { cloneDeep, merge } from "lodash";
-import { baseChar } from "../../constants/baseChar.ts";
+import { createChar } from "../../constants/baseChar.ts";
 
 type AddToCombatForm = {
   characters: {
@@ -48,17 +47,16 @@ export const AddToCombat = (props: { id: LibraryCharacter["libraryId"] }) => {
       (c) => c.libraryId === props.id,
     );
     if (!rootCharacter) return;
-    const newCharacters = usps.map(
-      (c) =>
-        merge(cloneDeep(baseChar), {
-          ...rootCharacter,
-          name: c ? `${rootCharacter.name} (${c})` : rootCharacter.name,
-          id: nanoid(),
-          currentHp: rootCharacter.maxHp,
-          concentrated: false,
-          initiative: 0,
-          effects: { preTurn: [], status: [], postTurn: [] },
-        }) as Character,
+    const newCharacters = usps.map((c) =>
+      createChar({
+        ...rootCharacter,
+        name: c ? `${rootCharacter.name} (${c})` : rootCharacter.name,
+        id: nanoid(),
+        currentHp: rootCharacter.maxHp,
+        concentrated: false,
+        initiative: 0,
+        effects: { preTurn: [], status: [], postTurn: [] },
+      }),
     );
     setCharacters((d) => {
       newCharacters.forEach((c) => (d[c.id] = c));

@@ -1,5 +1,7 @@
 import { Character } from "../types/Character.ts";
 import { nanoid } from "nanoid";
+import { DeepPartial } from "../types/utils.ts";
+import { cloneDeep, merge } from "lodash-es";
 
 export const baseChar: Character = {
   name: "Untitled",
@@ -29,3 +31,6 @@ export const baseChar: Character = {
   },
   isPersistent: true,
 };
+
+export const createChar = (char: DeepPartial<Character>): Character =>
+  merge(cloneDeep(baseChar), char);
