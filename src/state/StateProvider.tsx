@@ -1,36 +1,9 @@
 import { globalState, State } from "./State.tsx";
-import { useImmer } from "use-immer";
 import { PropsWithChildren, useEffect, useMemo, useState } from "react";
 import { createChar } from "../constants/baseChar.ts";
 import { getCharacters } from "../utils/getCharacters.ts";
-
-const useSyncedObject = <T extends Record<string, unknown> | unknown[] | null>(
-  key: string,
-  initialStateValue: T,
-  initialStoreValue: T,
-  migrate?: (old: T) => T,
-) => {
-  const [obj, setObj] = useImmer<T>(initialStateValue);
-  const [isLoading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (isLoading) return;
-    localStorage.setItem(key, JSON.stringify(obj));
-  }, [obj, key, isLoading]);
-
-  useEffect(() => {
-    const local = localStorage.getItem(key);
-
-    setObj((d) => {
-      const read =
-        local && local.length > 2 ? JSON.parse(local) : initialStoreValue;
-      d = migrate?.(read) || read;
-      return d;
-    });
-    setLoading(false);
-  }, [key, initialStoreValue, migrate, setObj]);
-  return [obj, setObj] as const;
-};
+import { useSyncedObject } from "./useSyncedObject.ts";
+import { loadMonsters, Monsters } from "../api/loadMonsters.ts";
 
 const emptyObj = {};
 const emptyArr: never[] = [];
@@ -68,6 +41,12 @@ export const StateProvider = ({ children }: PropsWithChildren) => {
     [charactersDict, options.enterInitiative],
   );
 
+  const [monsters, setMonsters] = useState<Monsters>([]);
+
+  useEffect(() => {
+    (async () => setMonsters(await loadMonsters()))();
+  }, []);
+
   return (
     <globalState.Provider
       value={{
@@ -80,6 +59,7 @@ export const StateProvider = ({ children }: PropsWithChildren) => {
         setTurnInfo,
         characterLibrary,
         setCharacterLibrary,
+        monsters,
       }}
     >
       {children}

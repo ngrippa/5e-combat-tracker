@@ -15,6 +15,7 @@ export type StaticCharacter = {
     string[]
   >;
   notes: string;
+  link: string;
 };
 
 export type LibraryCharacter = StaticCharacter & {

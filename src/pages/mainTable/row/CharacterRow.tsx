@@ -17,6 +17,10 @@ export const CharacterRow = () => {
       <StyledTableCell component="th" scope="row">
         <Typography
           color={turnInfo?.currentChar === char.id ? "success.main" : undefined}
+          sx={{ cursor: char.link ? "pointer" : undefined }}
+          onClick={
+            char.link ? () => window.open(char.link, "_blank") : undefined
+          }
         >
           {char.name}
         </Typography>

@@ -4,6 +4,7 @@ import { noop } from "lodash-es";
 import { Updater } from "use-immer";
 import { Options } from "../types/Options.ts";
 import { TurnInfo } from "../types/TurnInfo.ts";
+import { Monsters } from "../api/loadMonsters.ts";
 
 type Characters = Record<Character["id"], Character>;
 export type State = {
@@ -16,6 +17,7 @@ export type State = {
   setTurnInfo: Updater<TurnInfo>;
   characterLibrary: LibraryCharacter[];
   setCharacterLibrary: Updater<LibraryCharacter[]>;
+  monsters: Monsters;
 };
 
 export const globalState = createContext<State>({
@@ -28,6 +30,7 @@ export const globalState = createContext<State>({
   setTurnInfo: noop,
   characterLibrary: [],
   setCharacterLibrary: noop,
+  monsters: [],
 });
 
 export const useGlobalState = () => useContext(globalState);

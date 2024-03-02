@@ -25,8 +25,9 @@ export const baseStaticChar: StaticCharacter = {
     immunities: [],
     vulnerabilities: [],
   },
-  isPersistent: true,
+  isPersistent: false,
   notes: "",
+  link: "",
 };
 
 export const baseChar: Character = {
