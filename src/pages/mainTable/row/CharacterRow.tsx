@@ -8,6 +8,7 @@ import PsychologyIcon from "@mui/icons-material/Psychology";
 import { useChar } from "../charContext.ts";
 import { StatusEffect } from "./StatusEffect.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { openDndBeyond } from "../../../utils/openDndBeyond.ts";
 
 export const CharacterRow = () => {
   const { options, setCharacters, turnInfo } = useGlobalState();
@@ -17,10 +18,10 @@ export const CharacterRow = () => {
       <StyledTableCell component="th" scope="row">
         <Typography
           color={turnInfo?.currentChar === char.id ? "success.main" : undefined}
-          sx={{ cursor: char.link ? "pointer" : undefined }}
-          onClick={
-            char.link ? () => window.open(char.link, "_blank") : undefined
-          }
+          sx={{
+            cursor: char.link ? "pointer" : undefined,
+          }}
+          onClick={openDndBeyond(char)}
         >
           {char.name}
         </Typography>

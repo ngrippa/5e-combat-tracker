@@ -1,17 +1,30 @@
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import { useGlobalState } from "../../state/State.tsx";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { useMemo } from "react";
 import { AddToCombat } from "./AddToCombat.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { EditChar } from "./EditChar.tsx";
+import { openDndBeyond } from "../../utils/openDndBeyond.ts";
 
 export const Library = () => {
   const { characterLibrary, setCharacterLibrary } = useGlobalState();
 
   const columns: GridColDef[] = useMemo(
     () => [
-      { field: "name", headerName: "Name", flex: 12 },
+      {
+        field: "name",
+        headerName: "Name",
+        flex: 12,
+        renderCell: ({ row }) => (
+          <Typography
+            sx={{ cursor: row.link ? "pointer" : undefined }}
+            onClick={openDndBeyond(row)}
+          >
+            {row.name}
+          </Typography>
+        ),
+      },
       { field: "maxHp", headerName: "HP", width: 70 },
       { field: "ac", headerName: "AC", flex: 12 },
       {
