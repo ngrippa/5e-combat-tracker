@@ -5,6 +5,7 @@ import { AddChar } from "./AddChar.tsx";
 import { useMemo } from "react";
 import { AddToCombat } from "./AddToCombat.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { EditChar } from "./EditChar.tsx";
 
 export const Library = () => {
   const { characterLibrary, setCharacterLibrary } = useGlobalState();
@@ -18,10 +19,12 @@ export const Library = () => {
         field: "actions",
         headerName: "Aktionen",
         type: "actions",
-        renderCell: ({ id }) => {
+        width: 150,
+        renderCell: ({ id, row }) => {
           return (
             <Box>
               <AddToCombat id={id as string} />
+              <EditChar character={row} />
               <IconButton
                 onClick={() => {
                   setCharacterLibrary((d) => {

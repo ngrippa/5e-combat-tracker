@@ -1,34 +1,8 @@
 import { globalState, State } from "./State.tsx";
 import { useImmer } from "use-immer";
-import { nanoid } from "nanoid";
 import { PropsWithChildren, useEffect, useMemo, useState } from "react";
-import { baseChar, createChar } from "../constants/baseChar.ts";
+import { createChar } from "../constants/baseChar.ts";
 import { getCharacters } from "../utils/getCharacters.ts";
-
-const zahir = {
-  name: "Zahir",
-  id: nanoid(),
-  maxHp: 120,
-  currentHp: 120,
-  specialDamageEffects: {
-    resistances: ["fire"],
-  },
-  saves: baseChar.saves,
-};
-const korvin = {
-  name: "Corvin",
-  id: nanoid(),
-  maxHp: 90,
-  currentHp: 90,
-  saves: baseChar.saves,
-};
-const lyra = {
-  name: "Lyra",
-  id: nanoid(),
-  maxHp: 90,
-  currentHp: 90,
-  saves: baseChar.saves,
-};
 
 const useSyncedObject = <T extends Record<string, unknown> | unknown[] | null>(
   key: string,
@@ -60,11 +34,6 @@ const useSyncedObject = <T extends Record<string, unknown> | unknown[] | null>(
 
 const emptyObj = {};
 const emptyArr: never[] = [];
-const initialChars = {
-  [zahir.id]: zahir,
-  [korvin.id]: korvin,
-  [lyra.id]: lyra,
-} as State["charactersDict"];
 
 const migrateChars = (chars: State["charactersDict"]) => {
   Object.keys(chars).forEach((k) => {
@@ -73,15 +42,10 @@ const migrateChars = (chars: State["charactersDict"]) => {
   return chars;
 };
 
-const flatChars = Object.values(initialChars).map((c) => ({
-  ...c,
-  libraryId: nanoid(),
-}));
-
 export const StateProvider = ({ children }: PropsWithChildren) => {
   const [charactersDict, setCharacters] = useSyncedObject<
     State["charactersDict"]
-  >("characters", emptyObj, initialChars, migrateChars);
+  >("characters", emptyObj, emptyObj, migrateChars);
 
   const [options, setOptions] = useSyncedObject<State["options"]>(
     "options",
@@ -97,7 +61,7 @@ export const StateProvider = ({ children }: PropsWithChildren) => {
 
   const [characterLibrary, setCharacterLibrary] = useSyncedObject<
     State["characterLibrary"]
-  >("characterLibrary", emptyArr, flatChars);
+  >("characterLibrary", emptyArr, emptyArr);
 
   const characters = useMemo(
     () => getCharacters(charactersDict, !options.enterInitiative),
