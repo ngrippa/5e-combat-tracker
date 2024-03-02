@@ -62,5 +62,3 @@ export const ProgressTurn = () => {
     </>
   );
 };
-
-export const TurnInfoDialog = () => {};

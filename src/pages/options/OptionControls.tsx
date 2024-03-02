@@ -1,5 +1,5 @@
 import { useGlobalState } from "../../state/State.tsx";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Options } from "../../types/Options.ts";
 import Button from "@mui/material/Button";
 import { ProgressTurn } from "./ProgressTurn.tsx";
@@ -52,9 +52,11 @@ export const OptionControls = () => {
   return (
     <Box mt={2} p={3}>
       <Box mb={2}>
+        <Typography mr={1} component="span">
+          Turn {turnInfo?.turnNumber}
+        </Typography>
         {turnInfo && <Stopwatch />}
         <ProgressTurn />
-
         <Button
           variant="outlined"
           onClick={handleChange("enterInitiative")}
@@ -62,7 +64,6 @@ export const OptionControls = () => {
         >
           {options.enterInitiative ? "Sort initiative" : "Enter initiative"}
         </Button>
-
         <Button variant="outlined" onClick={resetFight} sx={{ ml: 1 }}>
           Reset Combat
         </Button>
