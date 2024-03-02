@@ -16,6 +16,7 @@ type CharacterForm = {
   name: string;
   maxHp: string;
   ac: string;
+  initiative: string;
 } & LibraryCharacter["saves"];
 
 export const AddChar = () => {
@@ -28,6 +29,7 @@ export const AddChar = () => {
     name,
     maxHp,
     ac,
+    initiative,
     ...rest
   }) => {
     setCharacterLibrary((d) => {
@@ -41,6 +43,7 @@ export const AddChar = () => {
         ac,
         saves,
         libraryId: nanoid(),
+        initiative,
         specialDamageEffects: {
           resistances: [],
           immunities: [],
@@ -71,10 +74,13 @@ export const AddChar = () => {
                 <FormInput name="name" />
               </Box>
               <Box my={1}>
-                <FormInput name="maxHp" type="number" />{" "}
+                <FormInput name="maxHp" type="number" />
               </Box>
               <Box my={1}>
-                <FormInput name="ac" />{" "}
+                <FormInput name="ac" />
+              </Box>
+              <Box my={1}>
+                <FormInput name="initiative" />
               </Box>
               <Typography variant="h6">Saves (optional)</Typography>
               <Box display="flex">

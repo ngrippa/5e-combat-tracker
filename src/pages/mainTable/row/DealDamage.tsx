@@ -1,4 +1,3 @@
-/// <reference types="vite-plugin-svgr/client" />
 import { useGlobalState } from "../../../state/State.tsx";
 import { useMemo, useState } from "react";
 import { ConcentrationCheck } from "./ConcentrationCheck.tsx";

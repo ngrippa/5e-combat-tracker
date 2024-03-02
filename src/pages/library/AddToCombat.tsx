@@ -14,6 +14,7 @@ import { Box, IconButton } from "@mui/material";
 import { useGlobalState } from "../../state/State.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { createChar } from "../../constants/baseChar.ts";
+import { rollDieString } from "../../dies/rollDieString.ts";
 
 type AddToCombatForm = {
   characters: {
@@ -54,7 +55,7 @@ export const AddToCombat = (props: { id: LibraryCharacter["libraryId"] }) => {
         id: nanoid(),
         currentHp: rootCharacter.maxHp,
         concentrated: false,
-        initiative: 0,
+        initiative: rollDieString(rootCharacter.initiative),
         effects: { preTurn: [], status: [], postTurn: [] },
       }),
     );

@@ -18,6 +18,7 @@ export type StaticCharacter = {
 
 export type LibraryCharacter = StaticCharacter & {
   libraryId: string;
+  initiative: string;
 };
 
 export type Character = StaticCharacter & {
