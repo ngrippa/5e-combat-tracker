@@ -6,6 +6,7 @@ import {
 import { nanoid } from "nanoid";
 import { DeepPartial } from "../types/utils.ts";
 import { cloneDeep, merge } from "lodash-es";
+import { rollDieString } from "../dies/rollDieString.ts";
 
 export const baseStaticChar: StaticCharacter = {
   name: "",
@@ -25,6 +26,7 @@ export const baseStaticChar: StaticCharacter = {
     vulnerabilities: [],
   },
   isPersistent: true,
+  notes: "",
 };
 
 export const baseChar: Character = {
@@ -44,6 +46,22 @@ export const baseLibraryChar: LibraryCharacter = {
   ...baseStaticChar,
   libraryId: nanoid(),
   initiative: "d20 + 0",
+};
+
+export const libToCombatChar = (
+  libChar: LibraryCharacter,
+  usp?: string,
+): Character => {
+  const baseCombatChar = {
+    ...libChar,
+    name: usp ? `${libChar.name} (${usp})` : libChar.name,
+    id: nanoid(),
+    currentHp: libChar.maxHp,
+    concentrated: false,
+    initiative: rollDieString(libChar.initiative),
+    effects: { preTurn: [], status: [], postTurn: [] },
+  };
+  return createChar(baseCombatChar);
 };
 
 export const createChar = (char: DeepPartial<Character>): Character =>

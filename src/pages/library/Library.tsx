@@ -1,7 +1,6 @@
 import { Box, IconButton } from "@mui/material";
 import { useGlobalState } from "../../state/State.tsx";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
-import { AddChar } from "./AddChar.tsx";
 import { useMemo } from "react";
 import { AddToCombat } from "./AddToCombat.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -69,7 +68,7 @@ export const Library = () => {
         />
       </Box>
 
-      <AddChar />
+      <EditChar />
     </Box>
   );
 };

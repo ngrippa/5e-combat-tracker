@@ -14,6 +14,7 @@ import Button from "@mui/material/Button";
 import { nanoid } from "nanoid";
 import { useMemo } from "react";
 import { baseLibraryChar } from "../../constants/baseChar.ts";
+import { FormCheckbox } from "../../components/FormCheckbox.tsx";
 
 type CharacterForm = Omit<LibraryCharacter, "libraryId" | "maxHp"> & {
   maxHp: string;
@@ -82,6 +83,14 @@ export const CharForm = (props: {
               <FormInput name={`saves.${save}`} optional label={save} />
             </Box>
           ))}
+        </Box>
+
+        <Box my={2}>
+          <FormCheckbox name="isPersistent" />
+        </Box>
+
+        <Box my={2}>
+          <FormInput name="notes" area sx={{ width: "100%" }} />
         </Box>
 
         <InvisibleSubmit />

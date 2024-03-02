@@ -13,6 +13,7 @@ export const FormInput = <T extends FieldValues>(props: {
   type?: string;
   optional?: boolean;
   sx?: SxProps;
+  area?: boolean;
 }) => {
   const {
     control,
@@ -31,6 +32,8 @@ export const FormInput = <T extends FieldValues>(props: {
           error={!!errors[props.name]}
           helperText={(errors[props.name]?.message ?? "") as string}
           sx={props.sx}
+          multiline={props.area}
+          minRows={props.area ? 3 : 1}
         />
       )}
     />

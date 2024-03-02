@@ -5,10 +5,17 @@ import Button from "@mui/material/Button";
 import { ProgressTurn } from "./ProgressTurn.tsx";
 import { Stopwatch } from "./Stopwatch.tsx";
 import { RollDie } from "./RollDie.tsx";
+import { libToCombatChar } from "../../constants/baseChar.ts";
 
 export const OptionControls = () => {
-  const { options, setOptions, setCharacters, setTurnInfo, turnInfo } =
-    useGlobalState();
+  const {
+    options,
+    setOptions,
+    setCharacters,
+    setTurnInfo,
+    turnInfo,
+    characterLibrary,
+  } = useGlobalState();
   const handleChange = (key: keyof Options) => () =>
     setOptions((d) => {
       d[key] = !d[key];
@@ -36,12 +43,10 @@ export const OptionControls = () => {
 
   const longRest = () => {
     resetFight();
-    setCharacters((chars) => {
-      Object.values(chars).forEach((char) => {
-        char.concentrated = false;
-        char.currentHp = char.maxHp;
-      });
-    });
+    const newChars = characterLibrary
+      .filter((c) => c.isPersistent)
+      .map((c) => libToCombatChar(c));
+    setCharacters(() => Object.fromEntries(newChars.map((c) => [c.id, c])));
   };
 
   return (

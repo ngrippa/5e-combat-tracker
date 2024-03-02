@@ -8,13 +8,11 @@ import {
   useForm,
 } from "react-hook-form";
 import { LibraryCharacter } from "../../types/Character.ts";
-import { nanoid } from "nanoid";
 import { FormInput } from "../../components/FormInput.tsx";
 import { Box, IconButton } from "@mui/material";
 import { useGlobalState } from "../../state/State.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { createChar } from "../../constants/baseChar.ts";
-import { rollDieString } from "../../dies/rollDieString.ts";
+import { libToCombatChar } from "../../constants/baseChar.ts";
 
 type AddToCombatForm = {
   characters: {
@@ -48,16 +46,8 @@ export const AddToCombat = (props: { id: LibraryCharacter["libraryId"] }) => {
       (c) => c.libraryId === props.id,
     );
     if (!rootCharacter) return;
-    const newCharacters = usps.map((c) =>
-      createChar({
-        ...rootCharacter,
-        name: c ? `${rootCharacter.name} (${c})` : rootCharacter.name,
-        id: nanoid(),
-        currentHp: rootCharacter.maxHp,
-        concentrated: false,
-        initiative: rollDieString(rootCharacter.initiative),
-        effects: { preTurn: [], status: [], postTurn: [] },
-      }),
+    const newCharacters = usps.map((usp) =>
+      libToCombatChar(rootCharacter, usp),
     );
     setCharacters((d) => {
       newCharacters.forEach((c) => (d[c.id] = c));

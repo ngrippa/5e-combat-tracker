@@ -14,6 +14,7 @@ export type StaticCharacter = {
     ArrayElement<typeof specialDamageEffects>,
     string[]
   >;
+  notes: string;
 };
 
 export type LibraryCharacter = StaticCharacter & {
